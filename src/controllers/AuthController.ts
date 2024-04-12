@@ -84,11 +84,16 @@ class AuthController{
             if(user){
                 user.token = null;
                 await user.save()
+            
+                return response
+                .status(200)
+                .json({message: "User logged out"});
             }
 
-           return response
-                    .status(200)
-                    .json({message: "User logged out"});
+            return response
+                    .status(404)
+                    .json({message: "User not found"});
+
 
         }catch(error){
 
