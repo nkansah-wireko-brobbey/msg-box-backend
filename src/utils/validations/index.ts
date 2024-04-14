@@ -21,3 +21,14 @@ export const loginSchema = z.object({
         
 
 });
+export const MessageSchema = z.object({
+    to: z
+        .string({required_error: "Recipient is required"}),
+    sender: z
+        .string({required_error: "Sender is required"}),
+    subject: z
+        .string({required_error:'Subject is required'}),
+    body: z
+        .string({required_error: 'Body is required'})
+        
+});
