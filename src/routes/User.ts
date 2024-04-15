@@ -4,5 +4,5 @@ import { validateUser } from '../middlewares/authenticate'
 
 export default (router: express.Router)=>{
 
-    router.get('/user',validateUser, UserController.getAllUsers)
+    router.get('/users',validateUser, UserController.getAllUsers)
 }
