@@ -14,6 +14,10 @@ export default (): express.Router => {
     messageRoutes(router)
     userRoutes(router)
 
+    router.get('/', (req, res) => {
+        res.json({ message: 'Server Up!' });
+    });
+
 
     return router;
 }
