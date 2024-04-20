@@ -18,7 +18,7 @@ class AuthController{
             const user = await UserModel.findOne({email});
 
             if(!user){
-                return response.status(404).json({status: false, message: "User not found"});
+                return response.status(401).json({status: false, message: "User not found"});
             }
 
             const isPasswordValid = await bcrypt.compare(password, user.password);
