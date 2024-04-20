@@ -7,7 +7,7 @@ class MessageController{
     public async getAllMessage(request: Request, response: Response){
 
         try{
-            const messages = await MessageModel.find();
+            const messages = await MessageModel.find().populate('sender','_id name email').populate('to', '_id name email');
 
             return response.status(200).json({data: messages});
 
