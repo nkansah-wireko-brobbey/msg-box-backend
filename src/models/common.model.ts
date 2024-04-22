@@ -13,3 +13,18 @@ export interface IRequest extends Request{
     user?: IUser
 
 }
+
+export interface IMessage{
+    _id: string;
+    sender: string;
+    receiver: string;
+    message: string;
+    status: number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface ISocketData{
+    data: IMessage;
+    receiver: string;
+}
