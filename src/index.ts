@@ -10,6 +10,9 @@ import { connectToMongoDB } from './db/config/dbconfig';
 
 import routes from './routes';
 
+import socketConfig from './sockets/index';
+import { Server } from 'socket.io';
+
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
@@ -25,6 +28,10 @@ app.use(morgan('combined'))
 app.use('/',routes());
 
 const server = createServer(app);
+
+const io = new Server(server)
+
+socketConfig(io);
 
 connectToMongoDB();
 
