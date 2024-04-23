@@ -50,7 +50,7 @@ class MessageController{
 
             await message.save()
 
-            return response.status(200).json({message:'Message sent',data:message});
+            return response.status(201).json({message:'Message sent',data:message});
 
         }catch(error){
 
