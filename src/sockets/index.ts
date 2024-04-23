@@ -6,12 +6,17 @@ export default (io: Server) => {
         console.log('a user connected');
         console.log(socket.id);
 
-        try{
-            const userId = socket.handshake.query.userId as string;
-            await socketController.saveSocketId(socket.id, userId);
-        }catch(error){
-            console.log(error)
-        }
+        socket.on('connect', async (userId) => {
+            try {
+                if (!userId) {
+                    throw new Error("User ID is required to connect socket");
+                }
+                await socketController.saveSocketId(socket.id, userId);
+                console.log('Socket connected:', userId);
+            } catch (err) {
+                console.error("Error handling socket connection:", err);
+            }
+        });
 
         socket.on('new_message', async (data) => {
             try {
