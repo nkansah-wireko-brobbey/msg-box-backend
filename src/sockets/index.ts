@@ -6,7 +6,9 @@ export default (io: Server) => {
         console.log('a user connected');
         console.log(socket.id);
 
-        socket.on('connect', async (userId) => {
+        io.emit('connected', socket.id);
+
+        socket.on('save_userId', async (userId) => {
             try {
                 if (!userId) {
                     throw new Error("User ID is required to connect socket");
