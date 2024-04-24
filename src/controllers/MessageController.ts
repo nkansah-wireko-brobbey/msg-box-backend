@@ -1,6 +1,8 @@
 import { Response, Request  } from "express";
 import { MessageModel } from "../db/message";
 import { MessageSchema } from "../utils/validations";
+import socketEvnets from "../sockets/Events.sockets";
+import { IMessage } from "../models/common.model";
 
 class MessageController{
 
@@ -48,7 +50,16 @@ class MessageController{
 
             })
 
-            await message.save()
+            await message.save();
+
+            const newMessage = await MessageModel.findById(message._id)
+            .populate('sender', '_id name email')
+            .populate('to', '_id name email');
+
+
+
+            socketEvnets.sendNewMessage(newMessage);
+            
 
             return response.status(201).json({message:'Message sent',data:message});
 
