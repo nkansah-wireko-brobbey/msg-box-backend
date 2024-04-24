@@ -40,3 +40,5 @@ server.listen(PORT, () => {
   console.log(colors.reset);
 
 });
+
+export {io};
