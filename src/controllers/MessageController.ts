@@ -2,14 +2,22 @@ import { Response, Request  } from "express";
 import { MessageModel } from "../db/message";
 import { MessageSchema } from "../utils/validations";
 import socketEvnets from "../sockets/Events.sockets";
-import { IMessage } from "../models/common.model";
+import { IMessage, IRequest } from "../models/common.model";
 
 class MessageController{
 
-    public async getAllMessage(request: Request, response: Response){
+    public async getAllMessage(request: IRequest, response: Response){
 
         try{
-            const messages = await MessageModel.find().populate('sender','_id name email').populate('to', '_id name email');
+
+            const {user} = request;
+
+            const sentMessages = await MessageModel.find({sender: user?._id}).populate('sender','_id name email').populate('to', '_id name email');
+
+            const receivedMessages = await MessageModel.find({to: user?._id}).populate('sender','_id name email').populate('to', '_id name email');
+
+            const messages = [...sentMessages, ...receivedMessages];
+
 
             return response.status(200).json({data: messages});
 
