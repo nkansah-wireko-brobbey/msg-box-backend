@@ -45,6 +45,24 @@ class MessageController{
          
 
     }
+    public async getAllReceivedMessages(request: IRequest, response: Response){
+
+        try{
+
+            const {user} = request;
+
+            const receivedMessages = await MessageModel.find({to: user?._id}).populate('sender','_id name email').populate('to', '_id name email');
+
+            const messages = [...receivedMessages];
+
+            return response.status(200).json({data: messages});
+
+        }catch(error){
+            return response.status(400).json({status: false, error})
+        }
+         
+
+    }
     public async getMessage(request: Request, response: Response){
 
         try{
