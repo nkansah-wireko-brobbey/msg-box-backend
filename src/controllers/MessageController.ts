@@ -1,8 +1,9 @@
 import { Response, Request  } from "express";
 import { MessageModel } from "../db/message";
-import { MessageSchema } from "../utils/validations";
+import { MessageSchema, validateEmail } from "../utils/validations";
 import socketEvnets from "../sockets/Events.sockets";
 import { IMessage, IRequest } from "../models/common.model";
+import { UserModel } from "../db/user";
 
 class MessageController{
 
@@ -68,7 +69,7 @@ class MessageController{
         try{
             const {id} = request.params
 
-            const messages = await MessageModel.findById(id);
+            const messages = await MessageModel.findById(id).populate('sender','_id name email').populate('to', '_id name email');
 
             return response.status(200).json({data: messages});
 
@@ -81,9 +82,15 @@ class MessageController{
     public async createMessage(request: Request, response: Response){
 
         try{
-            const {to,sender,body,subject} = request.body
-
+            let {to,sender,body,subject} = request.body
+            
             MessageSchema.parse({to,sender,body,subject});
+        
+            if(validateEmail(to)){
+            const toUser = await UserModel.findOne({email: to})
+            if(toUser)
+                to = toUser._id;
+            }
 
             const message = new MessageModel({
                 sender,
