@@ -19,8 +19,14 @@ class MessageController{
 
             const messages = [...sentMessages, ...receivedMessages];
 
+            console.log(messages)
 
-            return response.status(200).json({data: messages});
+            const uniqueMessages = messages.filter((message, index, self) =>{
+               return index === self.findIndex((t) => (t._id.toString() === message._id.toString()))
+            })
+
+
+            return response.status(200).json({data: uniqueMessages});
 
         }catch(error){
             return response.status(400).json({status: false, error})
